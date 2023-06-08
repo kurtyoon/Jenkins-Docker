@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>result page</title>
+</head>
+
+<body>
+    <form action="/result" method='GET'>
+        <table border="1">
+            <thead>
+                <tr>
+                    {% for item in header %}
+                        <th>{{ item }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in result %}
+                    <tr>
+                        {% for key, value in item.items() %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                        <td><input type='checkbox' name='delete' value='{{ loop.index0 }}'></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <span><button type="submit" value='Delete row'>Delete row</button>
+        
+        </span>
+    </form>
+    <span>
+        <form action="/" method="GET">
+            <input type="submit" value="Add row"></input>
+        </form>
+    </span>
+    
+    <form action="/" method="POST">
+        <input type="submit" value="Home">
+    </form>
+</body>
+
+</html>
