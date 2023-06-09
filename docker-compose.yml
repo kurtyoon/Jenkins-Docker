@@ -1,8 +1,8 @@
 version: "3.0"
 
 services:
-  web:
-    images: kurtyoon/flask-app
+  flask-app:
+    images: ${DOCKER_USR}/flask-app
     build: .
     ports:
       - "80:8000"
