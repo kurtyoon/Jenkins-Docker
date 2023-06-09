@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     triggers {
-        pollSCM('*/3 * * * *') // 3분 주로 변경사항을 체크
+        pollSCM('*/3 * * * *') // 3분 주기로 변경사항을 체크
     }
     
     environment { // Jenkins가 dockerhub에 접근할 수 있도록 환경변수 등록
