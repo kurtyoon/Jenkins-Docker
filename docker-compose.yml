@@ -2,6 +2,7 @@ version: "3.0"
 
 services:
   web:
+    images: kurtyoon/flask-app
     build: .
     ports:
       - "80:8000"
