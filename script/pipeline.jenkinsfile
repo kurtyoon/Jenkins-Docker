@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+    
+    triggers {
+        pollSCM('*/3 * * * *') // 3분 주로 변경사항을 체크
+    }
+    
+    environment { // Jenkins가 dockerhub에 접근할 수 있도록 환경변수 등록
+        DOCKER = credentials('kurtyoon')
+    }
+    
+    stages {
+        // repository를 다운로드
+        stage('Prepare') {
+            agent any
+            
+            steps {
+                git url: 'https://github.com/kurtyoon/Jenkins-Docker.git',
+                    branch: 'main', // 브랜치명
+                    credentialsId: 'github'
+            }
+            post {
+                success { // pull 성공했을 때
+                    echo 'Successfully cloned Repository'
+                }
+                always {
+                    echo "i tried..."
+                }
+                cleanup { // post에 있는 작업까지 다 끝낸 경우
+                    echo "after all ohter post condition"
+                }
+            }
+        }
+    
+        stage('Build') { // docker compose
+            steps { // 현재 작업 디렉토리와 clone 받은 레포지토리 위치가 다르다면 이동함
+                dir('/var/jenkins_home/workspace/docker-jenkins@2') {
+                    sh "docker-compose build flask-app"
+                }
+            }
+        }
+        
+        stage('Tag') { // 이미지 태깅
+            steps {
+                script {
+                    sh "docker tag ${DOCKER_USR}/flask-app ${DOCKER_USR}/flask-app:${BUILD_NUMBER}"
+                }
+            }
+        }
+    
+        stage('Push') { // docker hub에 push
+            steps {
+                script {
+                    sh "docker login -u ${DOCKER_USR} -p ${DOCKER_PSW}"
+                    sh "docker push ${DOCKER_USR}/flask-app:${BUILD_NUMBER}"
+                }
+            }
+        }
+    }
+}

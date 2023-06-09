@@ -1,8 +1,8 @@
 version: "3.0"
 
 services:
-  flask-app:
-    image: ${DOCKER_USR}/flask-app
-    build: .
+  flask-app: # 서비스 명
+    image: ${DOCKER_USR}/flask-app # Jenkins를 통해 빌드될 이미지의 이름 정의
+    build: . # 현재 디렉토리에 있는 Dockerfile을 통해 빌드
     ports:
-      - "80:8000"
+      - "80:8000" # 8000번을 포트포워딩을 통해 80포트로
